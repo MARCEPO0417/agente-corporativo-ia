@@ -10,7 +10,7 @@ Agente de inteligencia artificial (RAG) que responde preguntas de los colaborado
 - [x] Pipeline de ingesta multi-formato
 - [x] Pipeline RAG (embeddings + vector store + LLM)
 - [ ] Interfaz de chat
-- [ ] Despliegue en Oracle Cloud Infrastructure (OCI)
+- [ ] Despliegue en Oracle Cloud Infrastructure (OCI) — Cuenta OCI creada, pendiente de activar adapter y desplegar
 - [ ] Evidencia de despliegue (imagen/video) — **pendiente**
 
 ## 🏢 Contexto: la empresa ficticia
@@ -40,11 +40,11 @@ Documentos (pdf/docx/xlsx/pptx/md/csv/json/html)
         │
    Chunking de texto
         │
-   Embeddings — OCI Generative AI (servicio OCI)
+   Embeddings + LLM — Cohere (proveedor activo) — con adapter OCIGenAIProvider listo para swap sin cambios en el resto del pipeline (ver src/embeddings/oci_provider.py)
         │
    Vector Store — FAISS / ChromaDB
         │
-   Retriever + LLM — OCI Generative AI (Cohere Command R / Llama)
+   Retriever + generación de respuesta (RAG)
         │
    Interfaz de chat — Streamlit
         │
@@ -115,7 +115,8 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 - Python 3.11+
 - LangChain (orquestación RAG)
 - FAISS / ChromaDB (vector store)
-- OCI Generative AI SDK
+- Cohere API (proveedor activo de embeddings y generación)
+- OCI Generative AI SDK (adapter implementado, pendiente de activar con cuenta OCI — ver Roadmap de despliegue)
 - Streamlit (interfaz)
 - Docker (contenedorización)
 
