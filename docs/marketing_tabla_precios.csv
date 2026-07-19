@@ -1,5 +1,5 @@
 plan,precio_mensual_usd,precio_anual_usd,usuarios_incluidos,proyectos_activos,almacenamiento_gb,soporte,integraciones,automatizaciones_por_mes,periodo_prueba_dias
-Starter,0,0,3,2,1,Comunidad y base de conocimiento,Básicas (Google Drive, Slack),0,14
+Starter,0,0,3,2,1,Comunidad y base de conocimiento,"Básicas (Google Drive, Slack)",0,14
 Pro,12,120,10,ilimitados,50,Chat en horario laboral,"Avanzadas (Slack, Trello, Jira, Zapier)",500,14
 Business,29,290,25,ilimitados,250,Chat y correo prioritario 24/5,Todas las integraciones + API,5000,14
 Enterprise,contactar_ventas,contactar_ventas,ilimitados,ilimitados,ilimitados,Gerente de cuenta dedicado y SLA 99.9%,Todas + integraciones personalizadas,ilimitadas,30

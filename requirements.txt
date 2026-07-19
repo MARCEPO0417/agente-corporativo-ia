@@ -20,6 +20,9 @@ chromadb>=0.5.0
 # Cliente OCI (Generative AI, Object Storage, etc.)
 oci>=2.126.0
 
+# Cliente Cohere (proveedor temporal mientras se habilita OCI Generative AI)
+cohere>=5.11.0
+
 # Interfaz
 streamlit>=1.35.0
 

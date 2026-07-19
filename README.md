@@ -7,8 +7,8 @@ Agente de inteligencia artificial (RAG) que responde preguntas de los colaborado
 ## 📌 Estado del proyecto
 
 - [x] Definición del caso de uso y documentos fuente
-- [ ] Pipeline de ingesta multi-formato
-- [ ] Pipeline RAG (embeddings + vector store + LLM)
+- [x] Pipeline de ingesta multi-formato
+- [x] Pipeline RAG (embeddings + vector store + LLM)
 - [ ] Interfaz de chat
 - [ ] Despliegue en Oracle Cloud Infrastructure (OCI)
 - [ ] Evidencia de despliegue (imagen/video) — **pendiente**
@@ -50,6 +50,27 @@ Documentos (pdf/docx/xlsx/pptx/md/csv/json/html)
         │
    Despliegue — OCI Compute (Always Free / Container Instances)
 ```
+
+## 🧪 Ejemplos de preguntas y respuestas
+
+Evidencia real de `tests/test_rag_preguntas_reales.py` (10/10 preguntas, ejecutadas contra el índice FAISS real de `docs/` y Cohere en vivo — no son ejemplos escritos a mano). Cubren las 9 categorías de documentos con distintos niveles de dificultad: preguntas directas, preguntas que combinan dos datos del mismo documento, una con fraseo coloquial (no calcado del texto fuente), una pregunta trampa y una fuera de dominio.
+
+| Pregunta | Respuesta | Fuente citada |
+|---|---|---|
+| ¿Cuánto tiempo tiene el equipo de Legal para responder una solicitud de derechos ARCO? | 15 días hábiles. | `legal_politica_privacidad.md` |
+| ¿Cuál es el tiempo de respuesta objetivo cuando hay un incidente SEV-1? | 15 minutos. | `operacional_manual_procedimientos.pdf` |
+| ¿Cuántas solicitudes por hora puede hacer un cliente del plan Business según la API interna de NovaFlow? | Hasta 5000 solicitudes/hora. | `datos_api_interna.json` |
+| ¿Cuántos clientes empresariales nuevos se sumaron en el segundo trimestre según el boletín interno de junio? | 142 nuevos clientes empresariales. | `comunicacion_newsletter_junio2026.html` |
+| Si soy colaborador remoto y llevo 3 años en la empresa, ¿qué beneficios adicionales tengo por mi modalidad de trabajo y por mi antigüedad? *(combina 2 datos)* | Auxilio de conectividad de USD 30 mensuales (por ser remoto) + una semana adicional de vacaciones por antigüedad ≥ 2 años (semana de descanso flexible). | `rh_manual_onboarding.docx` |
+| ¿Cuál fue la utilidad operativa (EBIT) total del año 2025 y en qué mes pasó a ser positiva por primera vez? *(combina 2 datos)* | EBIT total 2025: 30 (miles USD). Pasó a ser positiva por primera vez en junio, con un valor de 3. | `financiero_estado_resultados.xlsx` |
+| Según los OKRs de Q3 2026, ¿a cuántos clientes activos quiere llegar NovaTech y a qué porcentaje de churn mensual apunta ese mismo trimestre? *(combina 2 datos)* | 4,200 clientes activos; reducir el churn mensual promedio de 3.2% a 2.6%. | `estrategico_roadmap_2026.pptx` |
+| Necesito un plan con soporte prioritario por chat y correo, 250 GB de almacenamiento y proyectos ilimitados. ¿Cuánto me costaría al mes? *(fraseo coloquial, no literal del documento)* | El plan Business cumple esos requisitos, con un precio mensual de USD 29. | `marketing_tabla_precios.csv` |
+| **[Pregunta trampa]** ¿Cuántos días de licencia de paternidad ofrece NovaTech Solutions a los nuevos padres? | *"No encuentro esa información en la documentación disponible."* | — (ninguna) |
+| **[Fuera de dominio]** ¿Cuál es la capital de Francia? | *"No encuentro esa información en la documentación disponible."* | — (ninguna) |
+
+Las dos últimas preguntas están incluidas **a propósito**: la de licencia de paternidad es un tema plausible que un colaborador real preguntaría pero que no está documentado en el manual de onboarding (prueba que el agente no "extrapola" desde temas relacionados como otros beneficios de RH); la de la capital de Francia es un dato que el modelo conoce de sobra por su entrenamiento general, pero que rechaza igual porque no proviene del CONTEXTO recuperado. En ambos casos el agente responde con el string de rechazo exacto y sin citar ninguna fuente, en vez de inventar una respuesta.
+
+**Diseño anti-alucinación:** las fuentes citadas nunca se generan libremente por el LLM. El modelo debe listar, en una línea `FUENTES_USADAS: ...` al final de su respuesta (separada del texto visible), los nombres de archivo que dice haber usado; `responder()` valida esa lista contra una whitelist con los nombres reales de la metadata de los chunks recuperados por el retriever, y descarta cualquier nombre que el modelo haya inventado o que no estuviera en el contexto entregado. Cuando la información solicitada no aparece en el contexto, el `SYSTEM_PROMPT` obliga a responder con un string de rechazo exacto y fijo, sin fuentes ni relleno — así se distingue una respuesta fundamentada de una alucinación.
 
 ## 📁 Estructura del repositorio
 
