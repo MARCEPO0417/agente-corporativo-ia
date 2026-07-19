@@ -1,0 +1,22 @@
+# Entornos
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Variables de entorno y credenciales
+.env
+.oci/
+
+# Datos generados (vector store, cachés)
+data/
+*.faiss
+*.sqlite3
+
+# Sistema
+.DS_Store
+*.log
+
+# IDE
+.vscode/
+.idea/

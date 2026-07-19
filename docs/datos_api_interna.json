@@ -1,0 +1,75 @@
+{
+  "api_nombre": "NovaFlow Public API",
+  "version": "v2.3",
+  "base_url": "https://api.novatechsolutions.com/v2",
+  "autenticacion": {
+    "tipo": "Bearer Token (OAuth2)",
+    "endpoint_token": "/oauth/token",
+    "scopes_disponibles": ["read:projects", "write:projects", "read:users", "admin:workspace"],
+    "expiracion_token_segundos": 3600
+  },
+  "limites_de_uso": {
+    "plan_pro": "1000 solicitudes/hora",
+    "plan_business": "5000 solicitudes/hora",
+    "plan_enterprise": "personalizado",
+    "codigo_respuesta_limite_excedido": 429
+  },
+  "endpoints": [
+    {
+      "metodo": "GET",
+      "ruta": "/projects",
+      "descripcion": "Lista todos los proyectos del workspace autenticado",
+      "parametros": ["status", "owner_id", "page", "page_size"],
+      "scope_requerido": "read:projects"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/projects",
+      "descripcion": "Crea un nuevo proyecto",
+      "cuerpo_requerido": ["name", "description", "team_id"],
+      "scope_requerido": "write:projects"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/projects/{project_id}/tasks",
+      "descripcion": "Lista las tareas de un proyecto específico",
+      "parametros": ["status", "assignee_id", "due_before"],
+      "scope_requerido": "read:projects"
+    },
+    {
+      "metodo": "PATCH",
+      "ruta": "/tasks/{task_id}",
+      "descripcion": "Actualiza el estado, responsable o fecha límite de una tarea",
+      "cuerpo_requerido": ["status opcional", "assignee_id opcional", "due_date opcional"],
+      "scope_requerido": "write:projects"
+    },
+    {
+      "metodo": "GET",
+      "ruta": "/users",
+      "descripcion": "Lista los usuarios del workspace",
+      "parametros": ["role", "active"],
+      "scope_requerido": "read:users"
+    },
+    {
+      "metodo": "POST",
+      "ruta": "/webhooks",
+      "descripcion": "Registra un webhook para eventos de proyectos y tareas",
+      "eventos_soportados": ["task.created", "task.completed", "project.archived"],
+      "scope_requerido": "admin:workspace"
+    }
+  ],
+  "entorno_sandbox": {
+    "base_url": "https://sandbox-api.novatechsolutions.com/v2",
+    "descripcion": "Entorno de pruebas con datos ficticios, se reinicia cada 24 horas",
+    "disponible_para_planes": ["Business", "Enterprise"]
+  },
+  "codigos_error_comunes": {
+    "400": "Solicitud mal formada",
+    "401": "Token inválido o expirado",
+    "403": "Scope insuficiente para esta operación",
+    "404": "Recurso no encontrado",
+    "429": "Límite de solicitudes excedido",
+    "500": "Error interno del servidor, reintentar con backoff exponencial"
+  },
+  "contacto_soporte_tecnico": "api-support@novatechsolutions.com"
+}

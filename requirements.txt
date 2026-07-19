@@ -1,0 +1,28 @@
+# Orquestación RAG
+langchain>=0.2.0
+langchain-community>=0.2.0
+
+# Parsing de documentos por formato
+pypdf>=4.0.0
+pdfplumber>=0.11.0
+python-docx>=1.1.0
+openpyxl>=3.1.0
+pandas>=2.2.0
+python-pptx>=0.6.23
+markdown>=3.6
+beautifulsoup4>=4.12.0
+lxml>=5.2.0
+
+# Vector store
+faiss-cpu>=1.8.0
+chromadb>=0.5.0
+
+# Cliente OCI (Generative AI, Object Storage, etc.)
+oci>=2.126.0
+
+# Interfaz
+streamlit>=1.35.0
+
+# Utilidades
+python-dotenv>=1.0.0
+tiktoken>=0.7.0
