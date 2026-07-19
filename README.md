@@ -9,7 +9,7 @@ Agente de inteligencia artificial (RAG) que responde preguntas de los colaborado
 - [x] Definición del caso de uso y documentos fuente
 - [x] Pipeline de ingesta multi-formato
 - [x] Pipeline RAG (embeddings + vector store + LLM)
-- [ ] Interfaz de chat
+- [x] Interfaz de chat
 - [ ] Despliegue en Oracle Cloud Infrastructure (OCI) — Cuenta OCI creada, pendiente de activar adapter y desplegar
 - [ ] Evidencia de despliegue (imagen/video) — **pendiente**
 
@@ -50,6 +50,8 @@ Documentos (pdf/docx/xlsx/pptx/md/csv/json/html)
         │
    Despliegue — OCI Compute (Always Free / Container Instances)
 ```
+
+**Nota técnica:** `VECTORSTORE_PATH` (definido en `.env`) siempre se resuelve contra la raíz del proyecto, no contra el directorio de trabajo del proceso que lo lanza (ver `src/vectorstore/faiss_store.py`). Importante para quien despliegue esto después (incluida la Fase 6 en Docker): si el proceso arranca desde un `cwd` distinto a la raíz del repo, la ruta relativa por defecto (`./data/vectorstore`) igual se resuelve bien.
 
 ## 🧪 Ejemplos de preguntas y respuestas
 
