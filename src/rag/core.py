@@ -41,7 +41,12 @@ def _extraer_fuentes_usadas(respuesta_cruda: str) -> tuple[str, list[str]]:
     return texto_visible, nombres
 
 
-def responder(pregunta: str, top_k: int = 6) -> dict:
+def responder(
+    pregunta: str,
+    top_k: int = 6,
+    proveedor: LLMProvider | None = None,
+    vectorstore: FAISSVectorStore | None = None,
+) -> dict:
     # top_k=6 (no 4): con este corpus, chunks que solo MENCIONAN un tema
     # (p. ej. el manual operacional refiriéndose a "la tabla de precios")
     # a veces superan en score al chunk que de verdad tiene el dato (la fila
@@ -49,13 +54,21 @@ def responder(pregunta: str, top_k: int = 6) -> dict:
     # fuera del contexto; k=6 los incluye de forma consistente en las
     # pruebas del Paso 4. Ver FAISSVectorStore.search (boost léxico) para el
     # resto del ajuste.
-    vectorstore = _obtener_vectorstore()
+    #
+    # proveedor/vectorstore son opcionales y deben pasarse juntos: permiten
+    # correr exactamente esta misma lógica de RAG con un adapter distinto
+    # (p. ej. OCIGenAIProvider en tests/test_oci_provider_manual.py) sin
+    # duplicar el orquestador. Por defecto usan el Cohere activo cacheado.
+    if vectorstore is None or proveedor is None:
+        vectorstore = _obtener_vectorstore()
+        proveedor = _proveedor
+
     chunks = vectorstore.search(pregunta, k=top_k)
 
     contexto = _formatear_contexto(chunks)
     prompt = SYSTEM_PROMPT + pregunta
 
-    respuesta_cruda = _proveedor.generar(prompt, contexto)
+    respuesta_cruda = proveedor.generar(prompt, contexto)
     respuesta_visible, nombres_citados = _extraer_fuentes_usadas(respuesta_cruda)
 
     # Whitelist: un nombre solo cuenta como fuente si el LLM lo citó en
