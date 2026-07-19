@@ -116,7 +116,7 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 - LangChain (orquestación RAG)
 - FAISS / ChromaDB (vector store)
 - Cohere API (proveedor activo de embeddings y generación)
-- OCI Generative AI SDK (adapter implementado, pendiente de activar con cuenta OCI — ver Roadmap de despliegue)
+- OCI Generative AI SDK (adapter implementado, pendiente de activar con cuenta OCI — ver sección Despliegue en Oracle Cloud Infrastructure)
 - Streamlit (interfaz)
 - Docker (contenedorización)
 
