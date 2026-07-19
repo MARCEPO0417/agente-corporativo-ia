@@ -18,6 +18,8 @@ from .chunking import chunkear_texto
 
 load_dotenv()
 
+_RAIZ_PROYECTO = Path(__file__).resolve().parent.parent.parent
+
 TAMANO_CHUNK_TOKENS = 500
 OVERLAP_TOKENS = 50
 TAMANO_LOTE_EMBED = 90  # margen bajo el límite de ~96 textos por llamada de Cohere
@@ -78,7 +80,13 @@ class FAISSVectorStore:
 
     def __init__(self, proveedor: LLMProvider, ruta_indice: str | Path | None = None):
         self._proveedor = proveedor
-        self._ruta_indice = Path(ruta_indice or os.getenv("VECTORSTORE_PATH", "./data/vectorstore"))
+
+        ruta = Path(ruta_indice or os.getenv("VECTORSTORE_PATH", "./data/vectorstore"))
+        # Rutas relativas se resuelven contra la raíz del repo, no contra el
+        # cwd del proceso (Streamlit u otros entrypoints pueden arrancar
+        # desde un directorio distinto y romper "./data/vectorstore").
+        self._ruta_indice = ruta if ruta.is_absolute() else _RAIZ_PROYECTO / ruta
+
         self._indice: faiss.Index | None = None
         self._chunks: list[ChunkAlmacenado] = []
 
