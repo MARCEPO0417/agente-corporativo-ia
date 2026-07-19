@@ -10,7 +10,8 @@ Agente de inteligencia artificial (RAG) que responde preguntas de los colaborado
 - [x] Pipeline de ingesta multi-formato
 - [x] Pipeline RAG (embeddings + vector store + LLM)
 - [x] Interfaz de chat
-- [ ] Despliegue en Oracle Cloud Infrastructure (OCI) — Cuenta OCI creada, pendiente de activar adapter y desplegar
+- [x] Adapter OCI Generative AI implementado y validado (10/10 preguntas, comportamiento equivalente a Cohere)
+- [ ] Despliegue en Oracle Cloud Infrastructure (OCI Compute) — pendiente
 - [ ] Evidencia de despliegue (imagen/video) — **pendiente**
 
 ## 🏢 Contexto: la empresa ficticia
@@ -51,7 +52,10 @@ Documentos (pdf/docx/xlsx/pptx/md/csv/json/html)
    Despliegue — OCI Compute (Always Free / Container Instances)
 ```
 
-**Nota técnica:** `VECTORSTORE_PATH` (definido en `.env`) siempre se resuelve contra la raíz del proyecto, no contra el directorio de trabajo del proceso que lo lanza (ver `src/vectorstore/faiss_store.py`). Importante para quien despliegue esto después (incluida la Fase 6 en Docker): si el proceso arranca desde un `cwd` distinto a la raíz del repo, la ruta relativa por defecto (`./data/vectorstore`) igual se resuelve bien.
+**Notas técnicas:**
+- `VECTORSTORE_PATH` (definido en `.env`) siempre se resuelve contra la raíz del proyecto, no contra el directorio de trabajo del proceso que lo lanza (ver `src/vectorstore/faiss_store.py`). Importante para quien despliegue esto después (incluida la Fase 6 en Docker): si el proceso arranca desde un `cwd` distinto a la raíz del repo, la ruta relativa por defecto (`./data/vectorstore`) igual se resuelve bien.
+- El modelo de embeddings correcto para OCI Generative AI es `cohere.embed-v4.0`, no `cohere.embed-multilingual-v3.0` (deprecado, retiro 2026-09-30).
+- En las llamadas de chat de OCI (`ChatDetails` / `CohereChatRequest`) hay que fijar `max_tokens` explícitamente: el default de OCI es mucho más bajo que el de Cohere directo y trunca la respuesta a mitad de frase sin avisar (`finish_reason: MAX_TOKENS`).
 
 ## 🧪 Ejemplos de preguntas y respuestas
 
@@ -117,8 +121,8 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 - Python 3.11+
 - LangChain (orquestación RAG)
 - FAISS / ChromaDB (vector store)
-- Cohere API (proveedor activo de embeddings y generación)
-- OCI Generative AI SDK (adapter implementado, pendiente de activar con cuenta OCI — ver sección Despliegue en Oracle Cloud Infrastructure)
+- Cohere API (proveedor activo por defecto)
+- OCI Generative AI (adapter implementado y validado — ver `src/embeddings/oci_provider.py`)
 - Streamlit (interfaz)
 - Docker (contenedorización)
 
