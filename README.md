@@ -116,6 +116,8 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 
 **URL pública:** [http://163.176.168.84:8501](http://163.176.168.84:8501) — instancia Compute (`VM.Standard.E2.1.Micro`, Always Free, `sa-saopaulo-1`) corriendo el contenedor Docker de `infra/Dockerfile`.
 
+> **Nota:** la IP pública de la instancia es efímera y puede cambiar si la VM se reinicia. Las capturas de esta sección documentan el funcionamiento real verificado el 19 de julio de 2026. Si el enlace no responde al momento de revisar este repositorio, el código y los tests locales (ver sección "🧪 Ejemplos de preguntas y respuestas") siguen siendo evidencia funcional completa del agente.
+
 **Pregunta respondida, con fuente citada** — confirma que el retriever y la cita de fuentes funcionan igual que en local:
 
 ![Pregunta respondida en OCI, con fuente citada](docs/evidencia/deploy_oci_pregunta_respondida.png)
