@@ -11,8 +11,8 @@ Agente de inteligencia artificial (RAG) que responde preguntas de los colaborado
 - [x] Pipeline RAG (embeddings + vector store + LLM)
 - [x] Interfaz de chat
 - [x] Adapter OCI Generative AI implementado y validado (10/10 preguntas, comportamiento equivalente a Cohere)
-- [ ] Despliegue en Oracle Cloud Infrastructure (OCI Compute) — pendiente
-- [ ] Evidencia de despliegue (imagen/video) — **pendiente**
+- [x] Despliegue en Oracle Cloud Infrastructure (OCI) — instancia Compute con Docker, funcionando en http://163.176.168.84:8501
+- [x] Evidencia de despliegue (imagen/video)
 
 ## 🏢 Contexto: la empresa ficticia
 
@@ -114,7 +114,15 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 
 ## 🎥 Evidencia de ejecución en la nube
 
-> _Pendiente: insertar aquí una captura de pantalla o video corto del agente respondiendo preguntas desde la URL pública desplegada en OCI._
+**URL pública:** [http://163.176.168.84:8501](http://163.176.168.84:8501) — instancia Compute (`VM.Standard.E2.1.Micro`, Always Free, `sa-saopaulo-1`) corriendo el contenedor Docker de `infra/Dockerfile`.
+
+**Pregunta respondida, con fuente citada** — confirma que el retriever y la cita de fuentes funcionan igual que en local:
+
+![Pregunta respondida en OCI, con fuente citada](docs/evidencia/deploy_oci_pregunta_respondida.png)
+
+**Pregunta trampa, rechazada sin alucinar** — confirma que el guardrail anti-alucinación también funciona en el despliegue real, no solo en pruebas locales:
+
+![Pregunta rechazada en OCI, sin inventar una respuesta](docs/evidencia/deploy_oci_pregunta_rechazada.png)
 
 ## 🛠️ Stack técnico
 
