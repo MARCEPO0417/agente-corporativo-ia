@@ -43,7 +43,7 @@ Documentos (pdf/docx/xlsx/pptx/md/csv/json/html)
         │
    Embeddings + LLM — Cohere (proveedor activo) — con adapter OCIGenAIProvider listo para swap sin cambios en el resto del pipeline (ver src/embeddings/oci_provider.py)
         │
-   Vector Store — FAISS / ChromaDB
+   Vector Store — FAISS
         │
    Retriever + generación de respuesta (RAG)
         │
@@ -129,8 +129,7 @@ Detalles del despliegue en [`infra/oci/README.md`](infra/oci/README.md).
 ## 🛠️ Stack técnico
 
 - Python 3.11+
-- LangChain (orquestación RAG)
-- FAISS / ChromaDB (vector store)
+- FAISS (vector store)
 - Cohere API (proveedor activo por defecto)
 - OCI Generative AI (adapter implementado y validado — ver `src/embeddings/oci_provider.py`)
 - Streamlit (interfaz)
